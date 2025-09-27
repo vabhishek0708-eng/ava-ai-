@@ -1,0 +1,64 @@
+{
+  "placeholderImages": [
+    {
+      "id": "burger",
+      "description": "A delicious gourmet burger",
+      "imageUrl": "https://images.unsplash.com/photo-1550547660-d9450f859349?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxnb3VybWV0JTIwYnVyZ2VyfGVufDB8fHx8MTc1ODkwNjExMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gourmet burger"
+    },
+    {
+      "id": "dosa",
+      "description": "A crispy South Indian dosa",
+      "imageUrl": "https://images.unsplash.com/photo-1695576634252-584e5988976d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxyZXN0YXVyYW50JTIwZG9zYXxlbnwwfHx8fDE3NTg5MjgxMzV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "restaurant dosa"
+    },
+    {
+      "id": "coffee",
+      "description": "A freshly brewed cup of coffee",
+      "imageUrl": "https://images.unsplash.com/photo-1563311977-d285756282dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxsYXR0ZSUyMGFydHxlbnwwfHx8fDE3NTg5MTc3MTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "latte art"
+    },
+    {
+      "id": "salad",
+      "description": "A healthy and refreshing salad",
+      "imageUrl": "https://images.unsplash.com/photo-1662743086910-38419bbf7f34?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxmcmVzaCUyMHNhbGFkfGVufDB8fHx8MTc1ODg5NTYwMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fresh salad"
+    },
+    {
+      "id": "pizza",
+      "description": "A classic margherita pizza",
+      "imageUrl": "https://images.unsplash.com/photo-1564936281291-294551497d81?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtYXJnaGVyaXRhJTIwcGl6emF8ZW58MHx8fHwxNzU4OTI4MTM1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "margherita pizza"
+    },
+    {
+      "id": "wings",
+      "description": "Spicy chicken wings",
+      "imageUrl": "https://images.unsplash.com/photo-1650939986300-ce9609921fa7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjaGlja2VuJTIwd2luZ3N8ZW58MHx8fHwxNzU4OTI4MTM0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chicken wings"
+    },
+    {
+      "id": "pasta",
+      "description": "A bowl of pasta carbonara",
+      "imageUrl": "https://images.unsplash.com/photo-1628079251261-624e723b7326?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwYXN0YSUyMGNhcmJvbmFyYXxlbnwwfHx8fDE3NTg4NjYzMTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pasta carbonara"
+    },
+    {
+      "id": "lava-cake",
+      "description": "A chocolate lava cake",
+      "imageUrl": "https://images.unsplash.com/photo-1626263468007-a9e0cf83f1ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjaG9jb2xhdGUlMjBjYWtlfGVufDB8fHx8MTc1ODkwMjgyN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chocolate cake"
+    },
+    {
+      "id": "mojito",
+      "description": "A refreshing mojito cocktail",
+      "imageUrl": "https://images.unsplash.com/photo-1659046842567-2787b5c9c2fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtb2ppdG8lMjBjb2NrdGFpbHxlbnwwfHx8fDE3NTg4MjcyMjZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "mojito cocktail"
+    },
+    {
+      "id": "tiramisu",
+      "description": "A slice of tiramisu",
+      "imageUrl": "https://images.unsplash.com/photo-1662230791691-b77f85c5b43a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx0aXJhbWlzdSUyMGRlc3NlcnR8ZW58MHx8fHwxNzU4ODQ5ODg3fDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageHint": "tiramisu dessert"
+    }
+  ]
+}
