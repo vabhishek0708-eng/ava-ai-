@@ -266,12 +266,15 @@ export default function ChatInterface() {
                     <ChatMessage key={message.id} message={message} />
                 ))}
                 {isPending && (
-                    <div className="flex items-center gap-2">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted">
+                    <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted">
                             <AvaLogo className="h-5 w-5 animate-pulse text-muted-foreground" />
                         </div>
                         <div className="rounded-2xl rounded-bl-none bg-muted px-4 py-3 text-foreground">
-                            <Loader2 className="h-5 w-5 animate-spin" />
+                           <div className="flex items-center gap-2">
+                             <Loader2 className="h-4 w-4 animate-spin" />
+                             <span className="text-sm italic">AVA is thinking...</span>
+                           </div>
                         </div>
                     </div>
                 )}
@@ -306,5 +309,3 @@ export default function ChatInterface() {
     </div>
   );
 }
-
-    
