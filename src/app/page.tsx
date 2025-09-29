@@ -71,7 +71,7 @@ export default function WelcomePage() {
           Your personal dining assistant. Explore our menu, ask questions, and get recommendations instantly.
         </p>
         <Button asChild size="lg" className="bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-lg transition-transform hover:scale-105 active:scale-100">
-          <Link href="/chat">Start Discovering</Link>
+          <Link href="/chat?from=welcome">Start Discovering</Link>
         </Button>
       </div>
     </main>
