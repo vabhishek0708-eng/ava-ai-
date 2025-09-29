@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { ShoppingCart, Trash2 } from "lucide-react";
+import { ShoppingCart, Trash2, Plus, Minus } from "lucide-react";
 import type { OrderItem } from "@/lib/types";
 
 interface OrderSheetProps {
@@ -20,9 +20,18 @@ interface OrderSheetProps {
   onRemoveFromOrder: (itemId: string) => void;
   onCheckout: () => void;
   checkoutDisabled: boolean;
+  onIncreaseQuantity: (itemId: string) => void;
+  onDecreaseQuantity: (itemId: string) => void;
 }
 
-export default function OrderSheet({ order, onRemoveFromOrder, onCheckout, checkoutDisabled }: OrderSheetProps) {
+export default function OrderSheet({ 
+  order, 
+  onRemoveFromOrder, 
+  onCheckout, 
+  checkoutDisabled,
+  onIncreaseQuantity,
+  onDecreaseQuantity
+}: OrderSheetProps) {
   const total = order.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
@@ -52,13 +61,24 @@ export default function OrderSheet({ order, onRemoveFromOrder, onCheckout, check
               {order.map((item) => (
                 <div key={item.id} className="flex items-center justify-between gap-4">
                   <div>
-                    <p className="font-medium">{item.name} {item.quantity > 1 && `(x${item.quantity})`}</p>
+                    <p className="font-medium">{item.name}</p>
                     <p className="text-sm text-muted-foreground">${(item.price * item.quantity).toFixed(2)}</p>
                   </div>
-                  <Button variant="ghost" size="icon" onClick={() => onRemoveFromOrder(item.id)}>
-                    <Trash2 className="h-4 w-4 text-destructive flex-shrink-0" />
-                    <span className="sr-only">Remove item</span>
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => onDecreaseQuantity(item.id)}>
+                      <Minus className="h-3 w-3 flex-shrink-0" />
+                      <span className="sr-only">Decrease quantity</span>
+                    </Button>
+                    <span className="font-medium w-4 text-center">{item.quantity}</span>
+                    <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => onIncreaseQuantity(item.id)}>
+                      <Plus className="h-3 w-3 flex-shrink-0" />
+                      <span className="sr-only">Increase quantity</span>
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => onRemoveFromOrder(item.id)}>
+                      <Trash2 className="h-4 w-4 text-destructive flex-shrink-0" />
+                      <span className="sr-only">Remove item</span>
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
