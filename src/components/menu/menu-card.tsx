@@ -44,7 +44,7 @@ export default function MenuCard({ item, onAddToOrder, onShowDetails }: MenuCard
           className="bg-gradient-to-r from-primary to-accent text-primary-foreground" 
           size="sm"
         >
-          <PlusCircle className="mr-2 h-4 w-4" />
+          <PlusCircle className="mr-2 h-4 w-4 flex-shrink-0" />
           Add to plate
         </Button>
       </CardFooter>
