@@ -1,9 +1,11 @@
+
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import type { Message, MenuItem } from '@/lib/types';
+import type { Message, MenuItem, OrderItem } from '@/lib/types';
 import { handleCheckoutAction, sendMessageAction, speechToTextAction } from '@/app/chat/actions';
 import { menuItems } from '@/lib/menu-data';
+import Link from 'next/link';
 
 import ChatMessage from './chat-message';
 import ChatInput from './chat-input';
@@ -17,6 +19,7 @@ import { ShoppingCart, Loader2, Utensils, Soup, UtensilsCrossed } from 'lucide-r
 import { Badge } from '../ui/badge';
 import DishDetailModal from '../menu/dish-detail-modal';
 import type { DishDetails } from '@/lib/types';
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog';
 
 
 const initialMessages: Message[] = [
@@ -47,7 +50,7 @@ function FloatingIcon({ style, icon: Icon }: { style: React.CSSProperties, icon:
 export default function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [isPending, setIsPending] = useState(false);
-  const [order, setOrder] = useState<MenuItem[]>([]);
+  const [order, setOrder] = useState<OrderItem[]>([]);
   const [checkoutAttempts, setCheckoutAttempts] = useState(0);
   const [selectedDish, setSelectedDish] = useState<MenuItem | null>(null);
 
@@ -57,6 +60,12 @@ export default function ChatInterface() {
   const audioChunksRef = useRef<Blob[]>([]);
 
   const [icons, setIcons] = useState<{ id: number; style: React.CSSProperties, icon: (props: any) => JSX.Element }[]>([]);
+
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+  const [checkoutModalMessage, setCheckoutModalMessage] = useState('');
+  
+  const [checkoutOrderState, setCheckoutOrderState] = useState<string>('');
+
 
   useEffect(() => {
     const generateIcons = () => {
@@ -86,11 +95,17 @@ export default function ChatInterface() {
     generateIcons();
   }, []);
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+    const container = messagesContainerRef.current;
+    if (container) {
+      const isScrolledToBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 150;
+      if (isScrolledToBottom) {
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+  }, [messages, isPending]);
 
   const handleStartRecording = async () => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -192,7 +207,18 @@ export default function ChatInterface() {
   };
   
   const handleAddToOrder = (item: MenuItem) => {
-    setOrder(prev => [...prev, item]);
+    setOrder(prev => {
+        const existingItem = prev.find(orderItem => orderItem.id === item.id);
+        if (existingItem) {
+            return prev.map(orderItem =>
+                orderItem.id === item.id
+                    ? { ...orderItem, quantity: orderItem.quantity + 1 }
+                    : orderItem
+            );
+        } else {
+            return [...prev, { ...item, quantity: 1 }];
+        }
+    });
     const addedMessage: Message = {
         id: Date.now().toString() + 'order',
         role: 'system',
@@ -201,31 +227,26 @@ export default function ChatInterface() {
     setMessages(prev => [...prev, addedMessage]);
   };
   
-  const handleRemoveFromOrder = (itemId: string, index: number) => {
-    setOrder(prev => prev.filter((_, i) => i !== index));
+  const handleRemoveFromOrder = (itemId: string) => {
+    setOrder(prev => prev.filter((item) => item.id !== itemId));
   };
   
   const handleCheckout = async () => {
+    const currentOrderState = JSON.stringify(order);
     const attempts = checkoutAttempts + 1;
     setCheckoutAttempts(attempts);
-    
-    if (attempts === 1) {
-        const checkoutMessage: Message = {
-            id: Date.now().toString() + 'co',
-            role: 'system',
-            content: 'Thank you! We\'ve received your checkout request. A waiter will be with you shortly to finalize your order.',
-        };
-        setMessages(prev => [...prev, checkoutMessage]);
+
+    if (attempts === 1 || currentOrderState !== checkoutOrderState) {
+        setCheckoutOrderState(currentOrderState);
+        setCheckoutAttempts(1); // Reset attempts if order has changed
+        setCheckoutModalMessage('Thank you! We\'ve received your checkout request. A waiter will be with you shortly to finalize your order.');
+        setIsCheckoutModalOpen(true);
     } else {
         const formData = new FormData();
         formData.append('attempts', attempts.toString());
         const result = await handleCheckoutAction(formData);
-        const checkoutMessage: Message = {
-            id: Date.now().toString() + 'co',
-            role: 'system',
-            content: result.data || 'A waiter will be with you shortly.',
-        };
-        setMessages(prev => [...prev, checkoutMessage]);
+        setCheckoutModalMessage(result.data || 'We have received your request. Due to high demand, a waiter will be with you as soon as possible. We appreciate your patience.');
+        setIsCheckoutModalOpen(true);
     }
   };
 
@@ -236,13 +257,13 @@ export default function ChatInterface() {
         ))}
         <div className="z-10 flex h-full flex-col bg-background/50 backdrop-blur-sm">
             <header className="flex h-16 shrink-0 items-center justify-between border-b border-border/50 px-4 md:px-6">
-                <div className="flex items-center gap-3">
+                <Link href="/" className="flex items-center gap-3">
                     <AvaLogo className="h-8 w-8 text-primary" />
                     <div>
                         <h2 className="font-headline text-xl font-bold text-foreground">AVA AI</h2>
                         <p className="text-xs text-muted-foreground">Your personal culinary guide</p>
                     </div>
-                </div>
+                </Link>
                 <OrderSheet 
                 order={order} 
                 onRemoveFromOrder={handleRemoveFromOrder} 
@@ -251,13 +272,13 @@ export default function ChatInterface() {
                 />
             </header>
 
-            <main className="flex-1 overflow-y-auto">
+            <main ref={messagesContainerRef} className="flex-1 overflow-y-auto">
                 <div className="py-4 border-b border-border/50">
                   <h3 className="text-lg font-semibold mb-2 px-4 md:px-6">Popular Dishes</h3>
                   <MenuCarousel onAddToOrder={handleAddToOrder} onShowDetails={setSelectedDish} />
                 </div>
                 <div className="mx-auto max-w-3xl space-y-6 p-4 md:p-6">
-                {messages.length === 1 && (
+                {messages.length > 1 && messages.length < 3 &&(
                   <div className="space-y-4">
                     <TodaysSpecials onSpecialSelect={handleSendMessage} />
                   </div>
@@ -272,19 +293,19 @@ export default function ChatInterface() {
                         </div>
                         <div className="rounded-2xl rounded-bl-none bg-muted px-4 py-3 text-foreground">
                            <div className="flex items-center gap-2">
-                             <Loader2 className="h-4 w-4 animate-spin" />
+                             <Loader2 className="h-4 w-4 animate-spin flex-shrink-0" />
                              <span className="text-sm italic">AVA is thinking...</span>
                            </div>
                         </div>
                     </div>
                 )}
-                <div ref={messagesEndRef} />
+                <div />
                 </div>
             </main>
 
             <footer className="sticky bottom-0 border-t border-border/50 bg-background/80 backdrop-blur-sm">
                 <div className="mx-auto max-w-3xl p-4 space-y-2">
-                    {messages.length === 1 && <StarterQuestions onQuestionSelect={handleSendMessage} />}
+                    {messages.length < 3 && <StarterQuestions onQuestionSelect={handleSendMessage} />}
                     <ChatInput 
                         onSubmit={handleSendMessage} 
                         isPending={isPending}
@@ -306,6 +327,19 @@ export default function ChatInterface() {
                 }}
             />
         )}
+        <AlertDialog open={isCheckoutModalOpen} onOpenChange={setIsCheckoutModalOpen}>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Checkout Request Received</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        {checkoutModalMessage}
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogAction onClick={() => setIsCheckoutModalOpen(false)}>Okay</AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     </div>
   );
 }
