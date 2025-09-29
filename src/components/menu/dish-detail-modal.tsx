@@ -45,7 +45,7 @@ export default function DishDetailModal({ dish, onClose, onAddToOrder }: DishDet
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-lg">
       <div className="relative w-full max-w-2xl rounded-xl bg-card/60 backdrop-blur-sm text-card-foreground shadow-2xl m-4">
         <Button onClick={onClose} variant="ghost" size="icon" className="absolute right-3 top-3 z-10">
-          <X />
+          <X className="flex-shrink-0" />
         </Button>
 
         <div className="grid md:grid-cols-2">
@@ -89,7 +89,7 @@ export default function DishDetailModal({ dish, onClose, onAddToOrder }: DishDet
                 <div className="mt-6 flex items-center justify-between">
                     <p className="font-semibold text-xl">${dish.price.toFixed(2)}</p>
                     <Button onClick={() => onAddToOrder(dish)} className="bg-gradient-to-r from-primary to-accent text-primary-foreground">
-                        <PlusCircle className="mr-2 h-4 w-4"/>
+                        <PlusCircle className="mr-2 h-4 w-4 flex-shrink-0"/>
                         Add to plate
                     </Button>
                 </div>
