@@ -13,26 +13,26 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { ShoppingCart, Trash2 } from "lucide-react";
-import type { MenuItem } from "@/lib/types";
+import type { OrderItem } from "@/lib/types";
 
 interface OrderSheetProps {
-  order: MenuItem[];
-  onRemoveFromOrder: (itemId: string, index: number) => void;
+  order: OrderItem[];
+  onRemoveFromOrder: (itemId: string) => void;
   onCheckout: () => void;
   checkoutDisabled: boolean;
 }
 
 export default function OrderSheet({ order, onRemoveFromOrder, onCheckout, checkoutDisabled }: OrderSheetProps) {
-  const total = order.reduce((sum, item) => sum + item.price, 0);
+  const total = order.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="outline" size="icon" className="relative">
-          <ShoppingCart className="h-5 w-5" />
+          <ShoppingCart className="h-5 w-5 flex-shrink-0" />
           {order.length > 0 && (
             <Badge className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full p-0">
-              {order.length}
+              {order.reduce((total, item) => total + item.quantity, 0)}
             </Badge>
           )}
           <span className="sr-only">View your plate</span>
@@ -49,14 +49,14 @@ export default function OrderSheet({ order, onRemoveFromOrder, onCheckout, check
         {order.length > 0 ? (
           <ScrollArea className="h-full pr-4">
             <div className="space-y-4">
-              {order.map((item, index) => (
-                <div key={`${item.id}-${index}`} className="flex items-center justify-between gap-4">
+              {order.map((item) => (
+                <div key={item.id} className="flex items-center justify-between gap-4">
                   <div>
-                    <p className="font-medium">{item.name}</p>
-                    <p className="text-sm text-muted-foreground">${item.price.toFixed(2)}</p>
+                    <p className="font-medium">{item.name} {item.quantity > 1 && `(x${item.quantity})`}</p>
+                    <p className="text-sm text-muted-foreground">${(item.price * item.quantity).toFixed(2)}</p>
                   </div>
-                  <Button variant="ghost" size="icon" onClick={() => onRemoveFromOrder(item.id, index)}>
-                    <Trash2 className="h-4 w-4 text-destructive" />
+                  <Button variant="ghost" size="icon" onClick={() => onRemoveFromOrder(item.id)}>
+                    <Trash2 className="h-4 w-4 text-destructive flex-shrink-0" />
                     <span className="sr-only">Remove item</span>
                   </Button>
                 </div>
