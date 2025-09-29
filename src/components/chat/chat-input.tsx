@@ -48,7 +48,7 @@ export default function ChatInput({
             Listening... <Mic className="h-4 w-4 ml-2 animate-pulse" />
           </div>
           <Button type="button" size="icon" onClick={onStopRecording} variant="destructive">
-            <Square className="h-5 w-5" />
+            <Square className="h-5 w-5 flex-shrink-0" />
             <span className="sr-only">Stop recording</span>
           </Button>
         </>
@@ -72,12 +72,12 @@ export default function ChatInput({
               disabled={isProcessing}
               className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
             >
-              <Mic className="h-5 w-5 text-muted-foreground" />
+              <Mic className="h-5 w-5 text-muted-foreground flex-shrink-0" />
               <span className="sr-only">Start recording</span>
             </Button>
           </div>
           <Button type="submit" size="icon" disabled={isProcessing || !message.trim()}>
-            {isProcessing ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
+            {isProcessing ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5 flex-shrink-0" />}
             <span className="sr-only">Send message</span>
           </Button>
         </>
