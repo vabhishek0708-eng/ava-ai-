@@ -1,10 +1,12 @@
+
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ChatInterface from '@/components/chat/chat-interface';
+import { Loader2 } from 'lucide-react';
 
-export default function ChatPage() {
+function ChatPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -19,4 +21,14 @@ export default function ChatPage() {
   }
 
   return <ChatInterface />;
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<div className="flex h-svh w-full items-center justify-center bg-background">
+      <Loader2 className="h-8 w-8 animate-spin" />
+    </div>}>
+      <ChatPageContent />
+    </Suspense>
+  );
 }
