@@ -55,7 +55,7 @@ export default function ChatInterface() {
   const [selectedDish, setSelectedDish] = useState<MenuItem | null>(null);
 
   const [isRecording, setIsRecording] = useState(false);
-  const [isTranscribing, setIsTranscribing] = useState(false);
+  const [isTranscribing, setIsTranscribing]  = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
@@ -231,6 +231,21 @@ export default function ChatInterface() {
     setOrder(prev => prev.filter((item) => item.id !== itemId));
   };
   
+  const handleDecreaseQuantity = (itemId: string) => {
+    setOrder(prev => {
+      const existingItem = prev.find(orderItem => orderItem.id === itemId);
+      if (existingItem && existingItem.quantity > 1) {
+        return prev.map(orderItem =>
+          orderItem.id === itemId
+            ? { ...orderItem, quantity: orderItem.quantity - 1 }
+            : orderItem
+        );
+      } else {
+        return prev.filter(orderItem => orderItem.id !== itemId);
+      }
+    });
+  };
+
   const handleCheckout = async () => {
     const currentOrderState = JSON.stringify(order);
     const attempts = checkoutAttempts + 1;
@@ -269,6 +284,8 @@ export default function ChatInterface() {
                 onRemoveFromOrder={handleRemoveFromOrder} 
                 onCheckout={handleCheckout}
                 checkoutDisabled={order.length === 0}
+                onIncreaseQuantity={(itemId) => handleAddToOrder(order.find(item => item.id === itemId)!)}
+                onDecreaseQuantity={handleDecreaseQuantity}
                 />
             </header>
 
